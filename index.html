@@ -9,6 +9,73 @@
   margin-left: 10%;
   margin-right: 10%;
 }
+/* Cool infinite background scrolling animation.
+ * Twitter: @kootoopas
+ */
+
+/* Exo thin font from Google. */
+@import url(https://fonts.googleapis.com/css?family=Exo:100);
+
+/* Background data (Original source: https://subtlepatterns.com/grid-me/) */
+$bg-url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC";
+$bg-width: 50px;
+$bg-height: 50px;
+
+/* Animations */
+@-webkit-keyframes bg-scrolling-reverse {
+  100% { background-position: $bg-width $bg-height; }
+}
+@-moz-keyframes    bg-scrolling-reverse {
+  100% { background-position: $bg-width $bg-height; }
+}
+@-o-keyframes      bg-scrolling-reverse {
+  100% { background-position: $bg-width $bg-height; }
+}
+@keyframes         bg-scrolling-reverse {
+  100% { background-position: $bg-width $bg-height; }
+}
+
+@-webkit-keyframes bg-scrolling {
+  0% { background-position: $bg-width $bg-height; }
+}
+@-moz-keyframes    bg-scrolling {
+  0% { background-position: $bg-width $bg-height; }
+}
+@-o-keyframes      bg-scrolling {
+  0% { background-position: $bg-width $bg-height; }
+}
+@keyframes         bg-scrolling {
+  0% { background-position: $bg-width $bg-height; }
+}
+
+/* Main styles */
+body {
+  margin-top: 13.5rem;
+  
+  color: #999;
+  font: 400 16px/1.5 exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
+  text-align: center;
+  /* img size is 50x50 */
+  background: url($bg-url) repeat 0 0;
+  
+  -webkit-animation: bg-scrolling-reverse .92s infinite; /* Safari 4+ */
+  -moz-animation:    bg-scrolling-reverse .92s infinite; /* Fx 5+ */
+  -o-animation:      bg-scrolling-reverse .92s infinite; /* Opera 12+ */
+  animation:         bg-scrolling-reverse .92s infinite; /* IE 10+ */
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function:    linear;
+  -o-animation-timing-function:      linear;
+  animation-timing-function:         linear;
+  
+  &::before {
+    content: "INFINITY";
+
+    font-size: 8rem;
+    font-weight: 100;
+    font-style: normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -27,114 +94,4 @@
 <a href="https://www.linkedin.com/in/nigel-hartman-a24437179">https://www.linkedin.com/in/nigel-hartman-a24437179</a><br>
 </div>
 </body>
-<script>
-// cat rain taken from https://codepen.io/jagjeetkhalsa/pen/vjNZYV
-//
-// Random integer function taken from:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
-}
-
-const ElementPosition = function ElementPosition(element, x, y, dWidth, dHeight, yVelocity) {
-  this.element = element;
-  this.x = x;
-  this.y = y;
-  this.dWidth = dWidth;
-  this.dHeight = dHeight;
-  this.yVelocity = yVelocity;
-}; 
-
-ElementPosition.prototype.updateY = function updateY() {
-  this.y = this.y + this.yVelocity;
-};
-
-const EmojiCatRain = function EmojiCatRain()  {
-  this.canvas = document.createElement('canvas');
-  let h = window.innerHeight;
-  let w = window.innerWidth;
-  this.canvas.height = h;
-  this.canvas.width = w;
-
-  let catElemBuf = [];
-
-  let catEmojis = ['😸', '😹', '😺', '😻', '😼', '😽', '🙀', '😿', '😾'];
-
-  let ctx = this.canvas.getContext('2d');
-
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, w - 1, h - 1);
-
-  document.body.insertBefore(this.canvas, document.body.nextSibling);
-
-  this.resetButton = document.createElement("button");
-  this.resetButton.innerHTML = "Reset Canvas";
-  // attach event listener to the button 
-  this.resetButton.addEventListener('click', function resetButtonClickEventListener(e) {
-    if (e.target && e.target.nodeName === 'BUTTON') {
-      console.log("Reset Clicked");
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, w - 1, h - 1);
-      catElemBuf = [];
-    }
-  });
-
-  document.body.insertBefore(this.resetButton, document.body.nextSibling);
-
-  window.requestAnimationFrame(function draw() { 
-
-    let numNewEmojis = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1 ];
-    let newEmojisIndex = getRandomIntInclusive(0, 10);
-
-    for (let i= 0; i < numNewEmojis[newEmojisIndex]; i++) {
-      let x = getRandomIntInclusive(0, w - 1);
-      let y = -42;
-      let size = getRandomIntInclusive(16, 42);
-      let dWidth = size; 
-      let dHeight = size;
-      let yVelocity = getRandomIntInclusive(1, 5);
-      let catElem = catEmojis[getRandomIntInclusive(0, catEmojis.length - 1)];
-      let elementPosition = new ElementPosition(catElem, x, y, dWidth, dHeight, yVelocity);
-      catElemBuf.push(elementPosition); 
-    }
-
-    catElemBuf.forEach(element => {
-      element.updateY();
-    });
-
-    catElemBuf = catElemBuf.filter(elem => {
-      if (elem.y > h - 1 + 42) {
-        return false;
-      }
-       return true;
-    });
-
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, w - 1, h - 1);
-
-    catElemBuf.forEach(elem => {
-      ctx.font = elem.dWidth + 'px serif';
-      ctx.fillText(elem.element, elem.x, elem.y);
-    });
-
-    window.requestAnimationFrame(draw);
-});
-} // EmojiCatRain
-
-
-// Allow inclusion in browers and node
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-  module.exports = {
-    RandomColorAnimation,
-  };
-} else {
-  window.EmojiCatRain = EmojiCatRain;
-
-  window.onload = function onload() {
-    window.ecr = new EmojiCatRain();
-  };
-} //else
-</script>
 </html>
