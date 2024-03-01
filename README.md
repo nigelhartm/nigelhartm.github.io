@@ -1,2 +1,2 @@
 # nigelhartm.github.io
-static website
+Static website, with personal infromation.
