@@ -1,2 +1,2 @@
 # nigelhartm.github.io
-Static website, with personal infromation.
+Static website, with personal information.
